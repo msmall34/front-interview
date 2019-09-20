@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 import Layout from '../components/Layout';
-import fetch from 'isomorphic-unfetch';
 
 const ImageWrapper = styled.div`
   align-items: center;
