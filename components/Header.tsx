@@ -9,7 +9,7 @@ const Wrapper = styled.header`
 const Title = styled.h1`
   color: #000000;
   font-size: 3rem;
-  text-decoration: none; 
+  text-decoration: none;
 `;
 
 const NavList = styled.ul`
@@ -44,6 +44,9 @@ const Header: React.FC = () => {
           </li>
           <li data-testid="navlink">
             <Link href="/about"><NavItem>About</NavItem></Link>
+          </li>
+          <li data-testid="navlink">
+            <Link href="/blog"><NavItem>Blog</NavItem></Link>
           </li>
         </NavList>
       </nav>
