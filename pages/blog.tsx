@@ -20,14 +20,18 @@ const ImageWrapper = styled.div`
 `;
 
 
-
-const Blog  = ({show})  => (
+const Blog = props => (
   <Layout>
-    <h1 data-testid="page-title">Blog</h1>
-    <p data-testid="text">This boilerplate uses Nextjs, React v16.8 and Styled components</p>
-    <h2>{show.title}</h2>
-    <p>{show.text}</p>
-    <img src={show.src} />
+    <h1>Blog</h1>
+    <ul>
+      {props.shows.map(show => (
+        <li key={show.id}>
+          <h2>{show.title}</h2>
+          <p>{show.text}</p>
+          <img src={`https://upply-interview.herokuapp.com/images/${show.src}`} />
+        </li>
+      ))}
+    </ul>
   </Layout>
 );
 
@@ -41,12 +45,9 @@ Blog.getInitialProps = async function() {
     })
   ).then(res => {
       console.log(res)
-      return res;
+      return { shows : res.data };
   }));
 
-  // console.log(`Show data fetched. Count: ${data.length}`);
-  //
-  // const shows = data.map(entry => {entry.show});
   return data;
 
 
