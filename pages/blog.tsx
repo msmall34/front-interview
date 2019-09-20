@@ -2,7 +2,9 @@ import styled from 'styled-components';
 
 import Layout from '../components/Layout';
 
-const ImageWrapper = styled.div`
+import fetch from 'isomorphic-unfetch';
+
+const PostWrapper = styled.div`
   align-items: center;
   display: flex;
   flex-wrap: wrap;
@@ -12,9 +14,18 @@ const ImageWrapper = styled.div`
     max-width: 450px;
   }
 
+  li {
+    list-style: none;
+    margin-bottom: 60px;
+  }
+
+  .dateLabel {
+    font-weight : bold;
+  }
+
   img {
-    padding: 0 5px;
-    height: 150px;
+    width: 200px
+    height: auto;
   }
 `;
 
@@ -24,11 +35,19 @@ const Blog = props => (
     <h1>Blog</h1>
     <ul>
       {props.shows.map(show => (
-        <li key={show.id}>
-          <h2>{show.title}</h2>
-          <p>{show.text}</p>
-          <img src={`https://upply-interview.herokuapp.com/images/${show.src}`} />
-        </li>
+        <PostWrapper>
+          <li key={show.id}>
+            <h2>{show.title}</h2>
+            <img src={`https://upply-interview.herokuapp.com/images/${show.src}`} />
+            <p>{show.text}</p>
+            {show.date && (
+            <div>
+              <span className="dateLabel">Date :</span>
+              <span className="datel">{show.date}</span>
+            </div>
+          )}
+          </li>
+        </PostWrapper>
       ))}
     </ul>
   </Layout>
