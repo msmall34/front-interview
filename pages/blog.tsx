@@ -4,51 +4,38 @@ import Layout from '../components/Layout';
 
 import fetch from 'isomorphic-unfetch';
 
-const PostWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+import Link from 'next/link'
 
-  div {
-    max-width: 450px;
-  }
 
-  li {
-    list-style: none;
-    margin-bottom: 60px;
-  }
+const LinkWrapper = styled.li`
+list-style: none;
 
-  .dateLabel {
-    font-weight : bold;
-  }
+div {
+  width: 200px;
+  margin-top: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  img {
-    width: 200px
-    height: auto;
-  }
 `;
-
 
 const Blog = props => (
   <Layout>
     <h1>Blog</h1>
     <ul>
-      {props.shows.map(show => (
-        <PostWrapper>
-          <li key={show.id}>
-            <h2>{show.title}</h2>
-            <img src={`https://upply-interview.herokuapp.com/images/${show.src}`} />
-            <p>{show.text}</p>
-            {show.date && (
-            <div>
-              <span className="dateLabel">Date :</span>
-              <span className="datel">{show.date}</span>
-            </div>
-          )}
-          </li>
-        </PostWrapper>
-      ))}
+      {props.shows.map(show => {
+        return (
+          <LinkWrapper key={show.id}>
+            <Post
+            title={show.title}
+            src={show.src}
+            text={show.text}
+            date={show.date}
+             />
+          </LinkWrapper>
+        )
+      })}
     </ul>
   </Layout>
 );
@@ -67,8 +54,23 @@ Blog.getInitialProps = async function() {
   }));
 
   return data;
-
-
 };
+
+function Post (props) {
+  return (
+
+      <div>
+
+        <Link href={`/post?title=${props.title}&src=${props.src}&text=${props.text}&date=${props.date}`}>
+
+            <a>{props.title}</a>
+
+        </Link>
+
+      </div>
+
+  )
+}
+
 
 export default Blog;
