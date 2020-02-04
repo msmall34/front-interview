@@ -10,28 +10,13 @@ import SearchBox from '../components/SearchBox'
 
 import moment from 'moment';
 
-
-
-const LinkWrapper = styled.li`
-list-style: none;
-
-div {
-  width: 200px;
-  margin-top: 20px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-`;
-
 const Blog = props => {
-    console.log('props', props);
     const [searchTerm, setSearchTerm] = useState();
-    let [filteredPosts, filterPosts] = useState([]);
+    const [filteredPosts, filterPosts] = useState([]);
 
     useEffect(() => {
-        const results = searchTerm ? props[0].filter(result =>result.title.includes(searchTerm)) : props[0];
+        const orderedByDatePosts = props[0].sort((a, b) => a.id - b.id);
+        const results = searchTerm ? orderedByDatePosts.filter(result =>result.title.includes(searchTerm)) : orderedByDatePosts;
         filterPosts(results);
     }, [searchTerm]);
 
