@@ -6,28 +6,52 @@ import Layout from '../components/Layout';
 
 import fetch from 'isomorphic-unfetch';
 
-import SearchBox from '../components/SearchBox'
+import SearchBox from '../components/SearchBox';
+
+import SortFilter from '../components/SortFilters';
 
 import moment from 'moment';
+import {object} from "prop-types";
 
-const Blog = props => {
-    const [searchTerm, setSearchTerm] = useState();
-    const [filteredPosts, filterPosts] = useState([]);
+const FilterWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+`;
+
+const Blog = ({ data }) => {
+    const [searchFilterTerm, setSearchFilterTerm] = useState();
+    const [sortFilterTerm, setSortFilterTerm] = useState('asc');
+    let [filteredPosts, filter] = useState([]);
+    let results = [];
 
     useEffect(() => {
-        const orderedByDatePosts = props[0].sort((a, b) => a.id - b.id);
-        const results = searchTerm ? orderedByDatePosts.filter(result =>result.title.includes(searchTerm)) : orderedByDatePosts;
-        filterPosts(results);
-    }, [searchTerm]);
+        if(searchFilterTerm) {
+            results = data.filter(orderedPost =>orderedPost.title.toLowerCase().includes(searchFilterTerm));
+        }else if(sortFilterTerm === 'asc' ) {
+            results = Object.create(data.sort((a, b) => (a.id > b.id) ? 1 : -1));
+        } else {
+            results = Object.create(data.sort((a, b) => (a.id > b.id) ? -1 : 1));
+        }
+        filter(results);
+    }, [searchFilterTerm, sortFilterTerm]);
+
 
     const handleChange = event => {
-        setSearchTerm(event.target.value);
+        setSearchFilterTerm(event.target.value.toLowerCase());
+    };
+
+    const handleSortChange = event => {
+        setSortFilterTerm(event.target.value);
     };
 
     return (
         <Layout>
             <h1>Blog</h1>
-            <SearchBox searchTerm={searchTerm} handleChange={handleChange} />
+            <FilterWrapper>
+                <SearchBox searchFilterTerm={searchFilterTerm} handleChange={handleChange} />
+                <SortFilter sortFilterTerm={sortFilterTerm} handleSortChange={handleSortChange}/>
+            </FilterWrapper>
             <ul>
                 {filteredPosts.map(filteredPost => {
                     return (
@@ -54,7 +78,7 @@ Blog.getInitialProps = async function() {
         status: response.status
     })
   ).then(res => {
-        return [res.data];
+        return  {data: res.data};
   }));
 
   return data;
